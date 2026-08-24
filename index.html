@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Command Center · 데이브</title>
+<style>
+:root { --bg:#0f1115; --panel:#171b23; --card:#1c212b; --line:#2a313d;
+  --txt:#e6e9ef; --dim:#8b93a3; --acc:#4f8cff; --green:#3dbd7d; --red:#f05a5a;
+  --amber:#f0b23a; --blue:#4f8cff; }
+* {box-sizing:border-box; margin:0; padding:0}
+body {background:var(--bg); color:var(--txt); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; line-height:1.5}
+.wrap {max-width:1180px; margin:0 auto; padding:24px}
+header {display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px; border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:20px}
+h1 {font-size:26px; letter-spacing:-.5px}
+h1 small {font-size:13px; color:var(--dim); font-weight:400; margin-left:10px}
+.meta {color:var(--dim); font-size:13px}
+.health {display:inline-flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--line); padding:8px 14px; border-radius:10px}
+.health .ok {color:var(--green,#3dbd7d)}.health .err {color:var(--red)#f05a5a}
+.health .err {color:var(--red)}
+.stats {display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:24px}
+.stat {background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px}
+.stat .n {font-size:28px; font-weight:700}
+.stat .l {color:var(--dim); font-size:13px; margin-top:2px}
+.stat .n.ok {color:var(--green)}.stat .n.err{color:var(--red)}
+nav {display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px}
+nav button {background:var(--card); color:var(--txt); border:1px solid var(--line); padding:9px 18px; border-radius:10px; cursor:pointer; font-size:14px}
+nav button.active {background:var(--acc); border-color:var(--acc); color:#fff}
+.tab {display:none}.tab.active {display:block}
+.grid {display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:14px}
+.card {background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px}
+.c-top {display:flex; align-items:center; gap:10px; margin-bottom:10px}
+.c-top h3 {font-size:15px; flex:1}
+.dot {width:11px; height:11px; border-radius:50%; flex-shrink:0}
+.st-ok {background:var(--green)}.st-err{background:var(--red)}.st-pause{background:var(--amber)}.st-miss{background:var(--dim)}
+.bad {background:var(--red); color:#fff; padding:2px 9px; border-radius:20px; font-size:11px}
+.ok {background:#123a2a; color:var(--green); padding:2px 9px; border-radius:20px; font-size:11px}
+.c-meta {display:grid; gap:5px; font-size:13px}
+.c-meta div {display:flex; gap:8px}
+.c-meta label {color:var(--dim); width:70px; flex-shrink:0}
+code {background:#11151c; padding:1px 6px; border-radius:5px; font-size:12px; color:#9fd0ff}
+.dim {color:var(--dim)}
+.badge {padding:2px 9px; border-radius:20px; font-size:11px}
+.bd-blue {background:#102a4d; color:#7ab6ff}.bd-orange{background:#3a2f10; color:#ffd27a}
+.bd-watch {background:#123a2a; color:var(--green)}
+.errbox {background:#3a1313; border:1px solid #5a2020; color:#ff9b9b; padding:8px 10px; border-radius:8px; margin-top:8px; font-size:12px}
+.cat {margin-bottom:22px}
+.cat > h2 {font-size:16px; color:var(--acc); border-left:3px solid var(--acc); padding-left:10px; margin-bottom:8px}
+.cat-count {display:inline-block; background:var(--acc); color:#fff; border-radius:20px; padding:0 9px; margin-right:8px; font-size:12px}
+.proj-toolbar {display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap}
+.proj-toolbar input {flex:1 1 220px; min-width:180px; background:var(--card); border:1px solid var(--line); color:var(--txt); padding:10px 14px; border-radius:10px; font-size:14px}
+.proj-toolbar select {background:var(--card); border:1px solid var(--line); color:var(--txt); padding:10px 12px; border-radius:10px; font-size:14px}
+.sec-title {font-size:18px; margin:0 0 14px; color:var(--txt); display:flex; align-items:center; gap:8px}
+.hl-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; margin-bottom:28px}
+.hl-card {display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,#1d2a45,#1c2130 60%); border:1px solid #2f4a7a; border-radius:14px; padding:16px 18px}
+.hl-icon {font-size:30px}
+.hl-body {flex:1}
+.hl-title {font-weight:700; font-size:15px}
+.hl-sub {display:flex; gap:10px; align-items:center; margin-top:6px; flex-wrap:wrap}
+.hl-badge {background:#3a2f10; color:#ffd27a; border:1px solid #5a4a1a; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap}
+.pcard {background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative}
+.pcard.mature {border-color:#2fa06a; box-shadow:0 0 0 1px #2fa06a33}
+.pc-top {display:flex; align-items:flex-start; gap:10px; margin-bottom:10px}
+.pc-top h3 {font-size:15px; flex:1; line-height:1.35}
+.done-cb {width:20px; height:20px; cursor:pointer; accent-color:var(--green); flex-shrink:0; margin-top:2px}
+.pcard.done {opacity:.7; border-color:var(--green)}
+.pcard.done .pc-top h3 {text-decoration:line-through}
+.pc-bar {height:8px; background:#11151c; border-radius:6px; overflow:hidden; position:relative; margin-bottom:14px}
+.pc-fill {height:100%; background:linear-gradient(90deg,var(--acc),var(--green)); border-radius:6px; transition:width .3s}
+.pc-pct {position:absolute; right:0; top:-20px; font-size:11px; color:var(--dim)}
+.pc-meta {display:grid; gap:5px; font-size:13px}
+.pc-meta div {display:flex; gap:8px}
+.pc-meta label {color:var(--dim); width:45px; flex-shrink:0}
+.proj-grid {gap:14px}
+.cat h2 .c-count{color:var(--dim); font-weight:400; margin-left:6px}
+ul.skill-list {background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 18px; column-count:2; column-gap:30px}
+ul.skill-list li {margin:4px 0; font-size:13px; break-inside:avoid}
+.picon {font-size:20px}
+footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
+@media(max-width:700px){
+  ul.skill-list{column-count:1}
+  .wrap{padding:14px}
+  h1{font-size:20px}
+  .stats{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+  .health{font-size:12px}
+  .grid{grid-template-columns:1fr !important}
+  .proj-toolbar{flex-direction:column}
+  .proj-toolbar input,.proj-toolbar select{width:100%}
+  .hl-grid{grid-template-columns:1fr}
+  .hl-badge{display:none}
+  nav{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{flex:1 0 auto; white-space:nowrap}
+  .c-meta div,.pc-meta div{flex-wrap:wrap}
+  footer{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🛰 Hermes Command Center <small>데이브 운영 대시보드</small></h1>
+    <div class="meta">최종 갱신: 2026-08-24 04:00 · <span class="health ok">🟢 정상</span></div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="n ok">20</div><div class="l">가동 중 크론</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">중지 크론</div></div>
+    <div class="stat"><div class="n"><span class="">0</span></div><div class="l">오류 건</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">스크립트(무에이전트)</div></div>
+    <div class="stat"><div class="n">49</div><div class="l">보유 스킬</div></div>
+    <div class="stat"><div class="n">80</div><div class="l">인사이트 WIKI</div></div>
+  </div>
+
+  <nav>
+    <button class="active" data-tab="tab-cron">⚙ 크론잡 (21)</button>
+    <button data-tab="tab-project">📌 프로젝트</button>
+    <button data-tab="tab-skill">🧠 스킬 (49)</button>
+    <button data-tab="tab-insight">💡 인사이트 (80)</button>
+  </nav>
+
+  <div class="tab active" id="tab-cron">
+    <div class="grid">
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>아침 브리핑 (KST 07:00)</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 7 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 07:00</div>
+            <div><label>최근 실행</label> 2026-08-23 07:05</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>telegram:-1003767764690</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Second Brain — 진의태 채팅 자동 ingest</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 8 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 08:00</div>
+            <div><label>최근 실행</label> 2026-08-23 08:03</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Second Brain 회고 질문</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 21 * * 1,3,5</code></div>
+            <div><label>다음 실행</label> 2026-08-24 21:00</div>
+            <div><label>최근 실행</label> 2026-08-21 21:02</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>NQ 장전 브리핑 v3.0</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 20 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 20:00</div>
+            <div><label>최근 실행</label> 2026-08-23 20:05</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>telegram:-1003767764690</code></div>
+            <div><label>스킬</label> trading-workflow</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>NT8+Notion 통합 매매복기일지</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 20 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 20:00</div>
+            <div><label>최근 실행</label> 2026-08-23 20:02</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>telegram:547570761</code></div>
+            <div><label>스킬</label> trading-workflow</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Hermes 설정 자동 백업 (매일 03:00 KST)</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 3 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-25 03:00</div>
+            <div><label>최근 실행</label> 2026-08-24 03:00</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>local</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          <span class="bd bd-blue">git_auto_backup.py</span>
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Hermes 세션 → Obsidian 대화 저장 (매 6시간)</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 */6 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 06:00</div>
+            <div><label>최근 실행</label> 2026-08-24 00:00</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>local</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          <span class="bd bd-blue">sessions_to_obsidian.py</span>
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-miss"></span>
+            <h3>DC 월간 납입금 매수 알림</h3>
+            <span class="status st-miss">never</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 0 1 * *</code></div>
+            <div><label>다음 실행</label> 2026-09-01 00:00</div>
+            <div><label>최근 실행</label> -</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-miss"></span>
+            <h3>DC 반기 리밸런싱 체크</h3>
+            <span class="status st-miss">never</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 0 1 1,7 *</code></div>
+            <div><label>다음 실행</label> 2027-01-01 00:00</div>
+            <div><label>최근 실행</label> -</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Second Brain Wiki → Hermes Memory 동기화</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>15 8 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 08:15</div>
+            <div><label>최근 실행</label> 2026-08-23 08:17</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>local</code></div>
+            <div><label>스킬</label> obsidian-second-brain</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-pause"></span>
+            <h3>notion-x-trading-auto-post</h3>
+            <span class="status st-pause">⏸ 중지됨</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code></code></div>
+            <div><label>다음 실행</label> 2026-08-21 01:09</div>
+            <div><label>최근 실행</label> 2026-08-21 00:59</div>
+            <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          <span class="bd bd-watch">⚙ 스크립트</span><span class="bd bd-blue">x_trading_watcher.py</span>
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-miss"></span>
+            <h3>Second Brain 인생 회고 (월/분기/연 서사화)</h3>
+            <span class="status st-miss">never</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>45 7 1 * *</code></div>
+            <div><label>다음 실행</label> 2026-09-01 07:45</div>
+            <div><label>최근 실행</label> -</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> obsidian-second-brain</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>Hermes Command Center 대시보드 자동 갱신</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 4 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-25 04:00</div>
+            <div><label>최근 실행</label> 2026-08-23 04:00</div>
+            <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
+            <div><label>전송</label> <code>local</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          <span class="bd bd-watch">⚙ 스크립트</span><span class="bd bd-blue">dashboard_build_all.py</span>
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>부동산 주간 뉴스·정책 감지 (당부쌤 봇 업데이트)</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 8 * * 1</code></div>
+            <div><label>다음 실행</label> 2026-08-24 08:00</div>
+            <div><label>최근 실행</label> 2026-08-17 08:21</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> real-estate-advisor-john</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>당부카페 멤버십 콘텐츠 자동수집</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 8 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 08:00</div>
+            <div><label>최근 실행</label> 2026-08-23 08:01</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>당부카페 주간 인사이트 큐레이션</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 9 * * 1</code></div>
+            <div><label>다음 실행</label> 2026-08-24 09:00</div>
+            <div><label>최근 실행</label> 2026-08-17 09:06</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>부동산 BLACK 카톡 → 부동산 Wiki 인제스트</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>15 8 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 08:15</div>
+            <div><label>최근 실행</label> 2026-08-23 08:19</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>네이버 캘린더 동기화</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>45 6 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 06:45</div>
+            <div><label>최근 실행</label> 2026-08-23 06:45</div>
+            <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          <span class="bd bd-watch">⚙ 스크립트</span><span class="bd bd-blue">naver_cal_sync_run.py</span>
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-miss"></span>
+            <h3>아이디어 주간 회고 (wiki/ideas/)</h3>
+            <span class="status st-miss">never</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 9 * * 1</code></div>
+            <div><label>다음 실행</label> 2026-08-24 09:00</div>
+            <div><label>최근 실행</label> -</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>아이디어 모니터링 (웹서치→알림+append)</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 9 * * 0</code></div>
+            <div><label>다음 실행</label> 2026-08-30 09:00</div>
+            <div><label>최근 실행</label> 2026-08-23 09:02</div>
+            <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div>
+        <div class="card">
+          <div class="c-head">
+            <span class="dot st-ok"></span>
+            <h3>KJV 쇼츠 하루 1편 자동제작</h3>
+            <span class="status st-ok">OK</span>
+          </div>
+          <div class="c-meta">
+            <div><label>스케줄</label> <code>0 10 * * *</code></div>
+            <div><label>다음 실행</label> 2026-08-24 10:00</div>
+            <div><label>최근 실행</label> 2026-08-23 10:04</div>
+            <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
+            <div><label>전송</label> <code>origin</code></div>
+            <div><label>스킬</label> 없음</div>
+          </div>
+          
+          
+        </div></div>
+  </div>
+  <div class="tab" id="tab-project">
+    <h2 class="sec-title">🏆 대표 성과</h2><div class="hl-grid">
+        <div class="hl-card">
+          <div class="hl-icon">💡</div>
+          <div class="hl-body">
+            <div class="hl-title">텔레그램 실시간 매매 중계 → Notion 복기 파이프라인</div>
+            <div class="hl-sub"><span class="bd bd-blue">insights</span>
+              <span class="dim">시작 2026-08-08</span>
+              <span class="dim">갱신 2026-08-08</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">RiskGuard: 원본 vs 커스텀 — 우회 가능성과 3중 장치</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-20</span>
+              <span class="dim">갱신 2026-08-20</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">TakeProfitTrader 트레이딩 규칙</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-19</span>
+              <span class="dim">갱신 2026-08-19</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">매매복기 자동 발행 시스템 (벨로그 전문 + 네이버카페 + X 간단요약)</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-08</span>
+              <span class="dim">갱신 2026-08-20</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">부동산 BLACK 2026 전체 아카이브 인덱스</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-16</span>
+              <span class="dim">갱신 2026-08-16</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">부동산 가격·물건 조회 워크플로 (John 봇용)</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-15</span>
+              <span class="dim">갱신 2026-08-15</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">부동산 규제·대출·세제 현황 (2026.8.23 기준)</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-08-22</span>
+              <span class="dim">갱신 2026-08-22</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">💼</div>
+          <div class="hl-body">
+            <div class="hl-title">아내 장은정 경력 타임라인</div>
+            <div class="hl-sub"><span class="bd bd-blue">career</span>
+              <span class="dim">시작 2026-08-17</span>
+              <span class="dim">갱신 2026-08-17</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div></div>
+    <h2 class="sec-title">📁 전체 프로젝트 <span class="dim" id="projCount"></span></h2>
+    <div class="proj-toolbar">
+      <input id="projSearch" type="text" placeholder="🔍 프로젝트명·분류 검색...">
+      <select id="projCat"><option value="">전체 분류</option><option>investing</option><option>career</option><option>insights</option></select>
+      <select id="projStatus"><option value="">전체 상태</option><option value="mature">성숙</option><option value="growing">성장</option><option value="stub">도안</option></select>
+      <select id="projDone"><option value="">완료 여부</option><option value="1">✅ 완료</option><option value="0">⏳ 진행중</option></select>
+    </div>
+    <div class="grid proj-grid" id="projGrid">
+        <div class="pcard" data-key="insights/AI-시대-부모가-준비할-것.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>AI 시대 부모·자기 자신이 준비해야 할 것</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/AI-시대-부모가-준비할-것.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/AI-자동화-생태계.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>AI 자동화 생태계</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/AI-자동화-생태계.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-09</div>
+            <div><label>갱신</label> 2026-08-09</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/Hermes-모델-fallback-구성.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>Hermes 모델 및 Fallback 구성</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/Hermes-모델-fallback-구성.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/LLM-위키-vs-RAG-영상분석.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>LLM 위키 vs RAG — 빌더 조쉬 × 브레인 트리니티 영상 분석</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/LLM-위키-vs-RAG-영상분석.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-11</div>
+            <div><label>갱신</label> 2026-08-11</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/UpNote-반복-통찰.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>UpNote에서 반복된 삶의 운영 통찰</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/UpNote-반복-통찰.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/단톡방-인사이트-누적.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>단톡방 반복 인사이트 누적</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/단톡방-인사이트-누적.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/루프-엔지니어링-인사이트.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>루프 엔지니어링 — 프롬프트를 넘어 자동화로</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/루프-엔지니어링-인사이트.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-24</div>
+            <div><label>갱신</label> 2026-08-24</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/정보-충돌-검토.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>정보 충돌 검토</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/정보-충돌-검토.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/카페-부동산-인사이트-2026-08-16.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 (2026-08-16)</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/카페-부동산-인사이트-2026-08-16.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/카페-부동산-인사이트-2026-08-17.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 (2026-08-17)</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/카페-부동산-인사이트-2026-08-17.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/칸반-멀티에이전트-활용.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>칸반 기반 멀티에이전트 팀 활용</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/칸반-멀티에이전트-활용.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="insights/텔레그램-매매복기-파이프라인.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>텔레그램 실시간 매매 중계 → Notion 복기 파이프라인</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/텔레그램-매매복기-파이프라인.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="insights/트레이딩-시장가치-성경적-근거.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>트레이딩의 시장 가치와 성경적 근거</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/트레이딩-시장가치-성경적-근거.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/DC퇴직연금-성과추적.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>DC 퇴직연금 성과 추적</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/DC퇴직연금-성과추적.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/RiskGuard-원본-vs-커스텀-우회.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>RiskGuard: 원본 vs 커스텀 — 우회 가능성과 3중 장치</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/RiskGuard-원본-vs-커스텀-우회.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-20</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/TakeProfitTrader-트레이딩-규칙.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>TakeProfitTrader 트레이딩 규칙</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/TakeProfitTrader-트레이딩-규칙.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-19</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/X-매매복기-자동포스팅.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>매매복기 자동 발행 시스템 (벨로그 전문 + 네이버카페 + X 간단요약)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/X-매매복기-자동포스팅.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/시카고-파견-월간수입지출표.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>시카고 파견 — 월간 수입지출표 (최종 확정)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/시카고-파견-월간수입지출표.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/시카고-파견-재무시뮬레이션.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>시카고 파견 재무 시뮬레이션 (4급·사택지원)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/시카고-파견-재무시뮬레이션.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/투자-이야기.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>투자 이야기</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/투자-이야기.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/트레이딩-패턴-추적.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>트레이딩 패턴 추적 (킬존/승률/반복실수)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/트레이딩-패턴-추적.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/2027-갈아타기-시뮬레이션.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>2027 나노시티 10억 매각 시 상급지 갈아타기 시뮬레이션</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/2027-갈아타기-시뮬레이션.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/34선-공통점-분석.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>34선 공통점 분석 — 당부쌤 투자 아파트 선별 원리</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/34선-공통점-분석.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/가족-부동산-프로필.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>David Jin 가족 부동산 상담 프로파일</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/가족-부동산-프로필.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/나롯-보유-부천-반전세.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>나롯 보유 + 전세 → 부천 반전세 (시나리오 B)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/나롯-보유-부천-반전세.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-10년-정책-연대기.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>한국 부동산 10년 정책 연대기 (2016~2026)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-10년-정책-연대기.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-14.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-14)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-14.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-16.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-16)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-16.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-17.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-17)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-17.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-18</div>
+            <div><label>갱신</label> 2026-08-18</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-18.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-18)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-18.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-19</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-19.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-19)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-19.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-20</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-20.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-20)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-20.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-21</div>
+            <div><label>갱신</label> 2026-08-21</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-21.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-21)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-21.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-08-22.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-22)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-08-22.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/부동산/부동산-BLACK-전체아카이브-인덱스.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK 2026 전체 아카이브 인덱스</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-전체아카이브-인덱스.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/부동산/부동산-가격-조회-워크플로.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 가격·물건 조회 워크플로 (John 봇용)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-가격-조회-워크플로.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/부동산/부동산-규제-대출-세제-현황-2026-08.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 규제·대출·세제 현황 (2026.8.23 기준)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-규제-대출-세제-현황-2026-08.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-뉴스-정책-로그.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 뉴스·정책 로그 (주간 크론 누적)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-뉴스-정책-로그.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부동산-세무-마스터.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 세무 마스터 (취득·양도·보유·비과세)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-세무-마스터.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/부천-40평대-추천.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부천 40평대 매수 추천 (학원가·입지 기준)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부천-40평대-추천.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/비규제-수도권-학군-실측.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>비규제 수도권 학군 실측 — 특목·자사고 진학률 (2026)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/비규제-수도권-학군-실측.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/아파트-핵심투자처-34선-2026.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>아파트 핵심 투자처 34선 시세 트래킹 (2026 대전망)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/아파트-핵심투자처-34선-2026.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/집-갈아타기-분석.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>집 갈아타기 전략 — 당부카페 수집 기반</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/집-갈아타기-분석.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/카페-부동산-인사이트-2026-08-16.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 (2026-08-16)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-부동산-인사이트-2026-08-16.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/카페-부동산-인사이트-2026-08-17.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 (2026-08-17)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-부동산-인사이트-2026-08-17.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/카페-투자-시사점-2026-08-16.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 투자 시사점 (2026-08-16)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-투자-시사점-2026-08-16.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/카페-투자-시사점-2026-08-17.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 투자 시사점 (2026-08-17)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-투자-시사점-2026-08-17.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/평촌-학군지-진입-시나리오.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>평촌 학군지 진입 시나리오 — 자본 필요액 계산</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/평촌-학군지-진입-시나리오.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/해외부동산-UAE-인사이트.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>해외부동산 UAE (두바이·아부다비) — 투자 인사이트</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/해외부동산-UAE-인사이트.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/해외부동산-미국-인사이트.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>해외부동산 미국 — 투자 인사이트</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/해외부동산-미국-인사이트.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/_수집/국토부-공식-정책-2025-2026.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>국토교통부 공식 정책 2025~2026 (부동산·주택공급)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/_수집/국토부-공식-정책-2025-2026.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/_수집/법령-원문-조항.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 관련 법령 원문 조항 (소득세법·종부세법·지방세법·주택법)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/_수집/법령-원문-조항.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="investing/부동산/_수집/세제-공식-문서-2025-2026.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>세제 공식 문서 (국세청·기획재정부 2025~2026)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/_수집/세제-공식-문서-2025-2026.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/부서경영평가보고서-진행.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>부서경영평가보고서 진행 추적</h3>
+            <input type="checkbox" class="done-cb" data-key="career/부서경영평가보고서-진행.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:20%"></div><span class="pc-pct">20%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>상태</label> <span class="badge bd-orange">도안</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="career/아내-장은정-경력.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>아내 장은정 경력 타임라인</h3>
+            <input type="checkbox" class="done-cb" data-key="career/아내-장은정-경력.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/중진공-해외근무-복지규정.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>중진공 해외근무 직원 복지규정 — 보수·복지·학자금 인사이트</h3>
+            <input type="checkbox" class="done-cb" data-key="career/중진공-해외근무-복지규정.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/중진공-해외파견-방콕-심화.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>해외파견 태국 방콕 — 심화 조사 (2순위 후보)</h3>
+            <input type="checkbox" class="done-cb" data-key="career/중진공-해외파견-방콕-심화.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/중진공-해외파견-시카고-심화.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>해외파견 시카고 — 심화 조사 (1순위 후보)</h3>
+            <input type="checkbox" class="done-cb" data-key="career/중진공-해외파견-시카고-심화.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/중진공-해외파견-알마티-심화.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>해외파견 카자흐스탄 알마티 — 심화 조사 (3순위 후보)</h3>
+            <input type="checkbox" class="done-cb" data-key="career/중진공-해외파견-알마티-심화.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:20%"></div><span class="pc-pct">20%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">도안</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/중진공-해외파견-최종지원-전략.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>중진공 해외파견 — 최종 지원 전략 (멀티 지원)</h3>
+            <input type="checkbox" class="done-cb" data-key="career/중진공-해외파견-최종지원-전략.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/진주-승진-퇴사-로드맵.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>진주 승진 &amp; 퇴사 로드맵</h3>
+            <input type="checkbox" class="done-cb" data-key="career/진주-승진-퇴사-로드맵.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
+        <div class="pcard" data-key="career/커리어-여정.md">
+          <div class="pc-top">
+            <span class="picon">💼</span>
+            <h3>커리어 여정</h3>
+            <input type="checkbox" class="done-cb" data-key="career/커리어-여정.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">career</span></div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div></div>
+  </div>
+  <div class="tab" id="tab-skill">
+    <section class="cat">
+            <h2 class="cat-title"><span class="cat-count">6</span>Automation</h2>
+            <ul class="skill-list"><li><b>content-publishing-automation</b> <span class=dim>· Cross-post/publish content to external channels - X (Twitter) via tweepy/OAuth1.0a v2 API,</span></li><li><b>daily-morning-briefing</b> <span class=dim>· Use when building morning briefing systems.</span></li><li><b>morning-briefing-pipeline</b> <span class=dim>· 완전 자동화된 아침 브리핑 파이프라인. 데이터 수집부터 카톡·텔레그램 전송까지 전체 워크플로우.</span></li><li><b>naver-cafe-post-automation</b> <span class=dim>· Automate posting trade reviews / articles to Naver Cafe (cafe.naver.com) via CDP Chrome + </span></li><li><b>windows-24h-bot-auto-recovery</b> <span class=dim>· Windows 24시간 머신에서 봇/데몬들이 재부팅·Windows 업데이트 강제 재시작에도 자동으로 복구되게 하는 3중 방어 체계 (launcher.py + 작업</span></li><li><b>youtube-shorts-video-automation</b> <span class=dim>· Produce vertical 9:16 YouTube Shorts end-to-end — script JSON -&gt; TTS -&gt; AI backgroun</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">5</span>Autonomous Ai Agents</h2>
+            <ul class="skill-list"><li><b>claude-code</b> <span class=dim>· Delegate coding to Claude Code CLI (features, PRs).</span></li><li><b>codex</b> <span class=dim>· Delegate coding to OpenAI Codex CLI (features, PRs).</span></li><li><b>computer-use</b> <span class=dim>· |</span></li><li><b>hermes-agent</b> <span class=dim>· Use, configure, theme, extend, and orchestrate Hermes Agent.</span></li><li><b>opencode</b> <span class=dim>· Delegate coding to OpenCode CLI (features, PR review).</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Career</h2>
+            <ul class="skill-list"><li><b>career-decision-analysis</b> <span class=dim>· 승진 타이밍과 가족 상황 충돌 시 의사결정 분석 프레임워크 - 비용·이익 계산, 옵션 비교, 타임라인 매핑</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Faith</h2>
+            <ul class="skill-list"><li><b>bible-phd</b> <span class=dim>· 대표님(진의태)의 성경 해석·묵상 보좌 프로젝트. Obsidian Raw의 biblical Knowledge 자료를 최우선 소스로, 그중에서도 &#x27;성경으로</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">6</span>Github</h2>
+            <ul class="skill-list"><li><b>codebase-inspection</b> <span class=dim>· Inspect codebases w/ pygount: LOC, languages, ratios.</span></li><li><b>github-auth</b> <span class=dim>· GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.</span></li><li><b>github-code-review</b> <span class=dim>· Review PRs: diffs, inline comments via gh or REST.</span></li><li><b>github-issues</b> <span class=dim>· Create, triage, label, assign GitHub issues via gh or REST.</span></li><li><b>github-pr-workflow</b> <span class=dim>· GitHub PR lifecycle: branch, commit, open, CI, merge.</span></li><li><b>github-repo-management</b> <span class=dim>· Clone/create/fork repos; manage remotes, releases.</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Last30days</h2>
+            <ul class="skill-list"><li><b>last30days</b> <span class=dim>· Research what people actually say about any topic in the last 30 days. Pulls posts and eng</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">2</span>Operations</h2>
+            <ul class="skill-list"><li><b>hermes-command-center-dashboard</b> <span class=dim>· GEEKOM에서 Hermes 운영 대시보드(크론잡·스킬·Obsidian 인사이트)를 정적 HTML로 만들어 Tailscale 사설망으로 서빙하는 파이프라인. co</span></li><li><b>hermes-ops</b> <span class=dim>· Fix 413 payload errors and tune cheapsub budget provider.</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">10</span>Productivity</h2>
+            <ul class="skill-list"><li><b>ebook-creation-automation</b> <span class=dim>· 한국어 &quot;따라하기(왕초보 매뉴얼)&quot; 전자책을 만들 때 쓰는 워크플로우. 샘플 전자책의 문체·구조에서 STYLE_GUIDE를 뽑고, 실제 프로젝트</span></li><li><b>google-workspace</b> <span class=dim>· Google OAuth2 client credentials (downloaded from Google Cloud Console)</span></li><li><b>maps</b> <span class=dim>· Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.</span></li><li><b>notion-api</b> <span class=dim>· Notion API: 인증, DB·페이지 읽기, 내보내기.</span></li><li><b>obsidian-second-brain</b> <span class=dim>· Build and maintain a personal LLM Wiki in Obsidian — a structured, interlinked knowledge b</span></li><li><b>ocr-and-documents</b> <span class=dim>· Extract text from PDFs/scans (pymupdf, marker-pdf).</span></li><li><b>pdf</b> <span class=dim>· Create, merge, split, fill, and secure PDF files.</span></li><li><b>telegram-automation</b> <span class=dim>· Telegram automation with Telethon — userbot setup, channel sync, message ingestion. Use wh</span></li><li><b>voice-idea-wiki</b> <span class=dim>· Telegram 음성 → Whisper → LLM 교정 → wiki/ideas/ 자동 승격 → 주간 회고·모니터링 파이프라인. 데이브 형이 음성 녹음한 아이디어를</span></li><li><b>windows-desktop-automation</b> <span class=dim>· Use when automating Windows desktop apps via PyAutoGUI.</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">7</span>Research</h2>
+            <ul class="skill-list"><li><b>apartment-price-checker</b> <span class=dim>· Playwright로 호갱노노에서 아파트 실거래가·매매가·전세가 조회. 네이버부동산은 불가능.</span></li><li><b>korea-public-data-api</b> <span class=dim>· 공공데이터포털(Data.GO.kr) API 활용 — 인증키, 호출 방법, 한국 부동산 데이터 추출</span></li><li><b>korea-teacher-personnel-regulations</b> <span class=dim>· Analyze Korean (경기도) teacher personnel/transfer regulations — compute 전보(전출) 시점, 지역 근무기간 만</span></li><li><b>naver-cafe-scraping</b> <span class=dim>· Naver Cafe works — READ (collect bulletins: article list/meta without login, article body </span></li><li><b>real-estate-advisor-john</b> <span class=dim>· 부동산 조언자 당부쌤 봇. 한국 부동산 정책·세무·시세 상담. 형(진의태) 가족 상황 맞춤. 지식베이스+on-demand 실시간 조회 기반. 형이 &quot;당부</span></li><li><b>web-research-harvesting</b> <span class=dim>· Research the web when search engines block scraping.</span></li><li><b>youtube-transcript-extraction</b> <span class=dim>· Programmatically extract YouTube video transcripts (자막) to learn from video content. Objec</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">2</span>Software Development</h2>
+            <ul class="skill-list"><li><b>plan</b> <span class=dim>· Write a markdown plan to .hermes/plans/; no execution.</span></li><li><b>python-debugpy</b> <span class=dim>· Debug Python: pdb REPL + debugpy remote (DAP).</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">5</span>Trading</h2>
+            <ul class="skill-list"><li><b>ninjatrader-addon-development</b> <span class=dim>· NinjaTrader 8 (NT8) C# AddOn 개발·슬리밍/커스텀 — 형의 prop firm(NQ/TakeProfitTrader) 트레이딩용 리스크 관리 A</span></li><li><b>nt8-riskguard-customization</b> <span class=dim>· NT8 리스크매니저(RiskGuard)를 오픈소스 nt8-riskguard에서 슬림화해 프랍트레이더(TPT) 전용 3중 잠금장치로 커스텀하는 방법. 코드 구조, </span></li><li><b>pension-dc-portfolio-management</b> <span class=dim>· 한국 퇴직연금 DC형 포트폴리오 백테스팅·전략 수립·월간 리밸런싱 자동화. 삼성증권 등 국내 증권사 거래 가능 ETF만 사용. 10년차 실전가 패턴(고정비중+기계</span></li><li><b>telegram-trading-review</b> <span class=dim>· 텔레그램 Trading Review 채널의 실시간 매매 기록(텍스트+차트 스크린샷)을 읽어서 Notion 매매일지 DB에 자동 복기 정리. 비전 분석 + 감정 타</span></li><li><b>trading-workflow</b> <span class=dim>· NQ 선물 트레이딩 자동화 — 장전 브리핑, 매매일지, ICT 분석. 형(데이브)의 트레이딩 루틴.</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Travel</h2>
+            <ul class="skill-list"><li><b>domestic-family-travel-planning</b> <span class=dim>· 한국 가족여행을 최신 지도·플레이스 정보와 숙소 조건에 맞춰 실행 가능한 일정, 식사, 장보기, 액티비티, 예산, 우천 대체안으로 설계하는 방법</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Troubleshooting</h2>
+            <ul class="skill-list"><li><b>hermes-vision-aux-fix</b> <span class=dim>· Diagnose and fix a failing auxiliary vision model (vision_analyze / image analysis) in Her</span></li></ul>
+          </section><section class="cat">
+            <h2 class="cat-title"><span class="cat-count">1</span>Youtube Ingest</h2>
+            <ul class="skill-list"><li><b>youtube-ingest</b> <span class=dim>· Ingest YouTube podcasts into your knowledge base — fetch transcripts, split by speaker/cha</span></li></ul>
+          </section>
+  </div>
+  <div class="tab" id="tab-insight">
+    <div class="grid">
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>AI 시대 부모·자기 자신이 준비해야 할 것</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>insights/AI-시대-부모가-준비할-것.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>AI 자동화 생태계</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-09</div>
+            <div><label>갱신</label> 2026-08-09</div>
+            <div><label>파일</label> <code>insights/AI-자동화-생태계.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>Hermes 모델 및 Fallback 구성</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>insights/Hermes-모델-fallback-구성.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>LLM 위키 vs RAG — 빌더 조쉬 × 브레인 트리니티 영상 분석</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-11</div>
+            <div><label>갱신</label> 2026-08-11</div>
+            <div><label>파일</label> <code>insights/LLM-위키-vs-RAG-영상분석.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>UpNote에서 반복된 삶의 운영 통찰</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>insights/UpNote-반복-통찰.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>단톡방 반복 인사이트 누적</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>insights/단톡방-인사이트-누적.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>루프 엔지니어링 — 프롬프트를 넘어 자동화로</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-24</div>
+            <div><label>갱신</label> 2026-08-24</div>
+            <div><label>파일</label> <code>insights/루프-엔지니어링-인사이트.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>정보 충돌 검토</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>insights/정보-충돌-검토.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 (2026-08-16)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>insights/카페-부동산-인사이트-2026-08-16.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 (2026-08-17)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>insights/카페-부동산-인사이트-2026-08-17.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>칸반 기반 멀티에이전트 팀 활용</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>insights/칸반-멀티에이전트-활용.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>텔레그램 실시간 매매 중계 → Notion 복기 파이프라인</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>insights/텔레그램-매매복기-파이프라인.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
+            <h3>트레이딩의 시장 가치와 성경적 근거</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>파일</label> <code>insights/트레이딩-시장가치-성경적-근거.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>DC 퇴직연금 성과 추적</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>investing/DC퇴직연금-성과추적.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>RiskGuard: 원본 vs 커스텀 — 우회 가능성과 3중 장치</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-20</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>파일</label> <code>investing/RiskGuard-원본-vs-커스텀-우회.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>TakeProfitTrader 트레이딩 규칙</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-19</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>파일</label> <code>investing/TakeProfitTrader-트레이딩-규칙.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>매매복기 자동 발행 시스템 (벨로그 전문 + 네이버카페 + X 간단요약)</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>파일</label> <code>investing/X-매매복기-자동포스팅.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>시카고 파견 — 월간 수입지출표 (최종 확정)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/시카고-파견-월간수입지출표.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>시카고 파견 재무 시뮬레이션 (4급·사택지원)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/시카고-파견-재무시뮬레이션.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>투자 이야기</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>파일</label> <code>investing/투자-이야기.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>트레이딩 패턴 추적 (킬존/승률/반복실수)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>investing/트레이딩-패턴-추적.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>2027 나노시티 10억 매각 시 상급지 갈아타기 시뮬레이션</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>파일</label> <code>investing/부동산/2027-갈아타기-시뮬레이션.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>34선 공통점 분석 — 당부쌤 투자 아파트 선별 원리</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/34선-공통점-분석.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>David Jin 가족 부동산 상담 프로파일</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>파일</label> <code>investing/부동산/가족-부동산-프로필.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>나롯 보유 + 전세 → 부천 반전세 (시나리오 B)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/나롯-보유-부천-반전세.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>한국 부동산 10년 정책 연대기 (2016~2026)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-10년-정책-연대기.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-14)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-14.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-16)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-16.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-17)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-18</div>
+            <div><label>갱신</label> 2026-08-18</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-17.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-18)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-19</div>
+            <div><label>갱신</label> 2026-08-19</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-18.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-19)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-20</div>
+            <div><label>갱신</label> 2026-08-20</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-19.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-20)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-21</div>
+            <div><label>갱신</label> 2026-08-21</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-20.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-21)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-21.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-08-22)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-08-22.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK 2026 전체 아카이브 인덱스</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-전체아카이브-인덱스.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 가격·물건 조회 워크플로 (John 봇용)</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-15</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-가격-조회-워크플로.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 규제·대출·세제 현황 (2026.8.23 기준)</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-규제-대출-세제-현황-2026-08.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 뉴스·정책 로그 (주간 크론 누적)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-뉴스-정책-로그.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 세무 마스터 (취득·양도·보유·비과세)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-세무-마스터.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부천 40평대 매수 추천 (학원가·입지 기준)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/부천-40평대-추천.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>비규제 수도권 학군 실측 — 특목·자사고 진학률 (2026)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/비규제-수도권-학군-실측.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>아파트 핵심 투자처 34선 시세 트래킹 (2026 대전망)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/아파트-핵심투자처-34선-2026.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>집 갈아타기 전략 — 당부카페 수집 기반</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/집-갈아타기-분석.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 (2026-08-16)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/카페-부동산-인사이트-2026-08-16.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 (2026-08-17)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/카페-부동산-인사이트-2026-08-17.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 투자 시사점 (2026-08-16)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>investing/부동산/카페-투자-시사점-2026-08-16.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 투자 시사점 (2026-08-17)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>investing/부동산/카페-투자-시사점-2026-08-17.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>평촌 학군지 진입 시나리오 — 자본 필요액 계산</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/평촌-학군지-진입-시나리오.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>해외부동산 UAE (두바이·아부다비) — 투자 인사이트</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/해외부동산-UAE-인사이트.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>해외부동산 미국 — 투자 인사이트</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>investing/부동산/해외부동산-미국-인사이트.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>국토교통부 공식 정책 2025~2026 (부동산·주택공급)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>파일</label> <code>investing/부동산/_수집/국토부-공식-정책-2025-2026.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 관련 법령 원문 조항 (소득세법·종부세법·지방세법·주택법)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>파일</label> <code>investing/부동산/_수집/법령-원문-조항.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>세제 공식 문서 (국세청·기획재정부 2025~2026)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-08-15</div>
+            <div><label>갱신</label> -</div>
+            <div><label>파일</label> <code>investing/부동산/_수집/세제-공식-문서-2025-2026.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>부서경영평가보고서 진행 추적</h3>
+            <span class="badge bd-orange">도안</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-08</div>
+            <div><label>갱신</label> 2026-08-08</div>
+            <div><label>파일</label> <code>career/부서경영평가보고서-진행.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>아내 장은정 경력 타임라인</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>career/아내-장은정-경력.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>중진공 해외근무 직원 복지규정 — 보수·복지·학자금 인사이트</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>career/중진공-해외근무-복지규정.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>해외파견 태국 방콕 — 심화 조사 (2순위 후보)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>career/중진공-해외파견-방콕-심화.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>해외파견 시카고 — 심화 조사 (1순위 후보)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>career/중진공-해외파견-시카고-심화.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>해외파견 카자흐스탄 알마티 — 심화 조사 (3순위 후보)</h3>
+            <span class="badge bd-orange">도안</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>career/중진공-해외파견-알마티-심화.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>중진공 해외파견 — 최종 지원 전략 (멀티 지원)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>career/중진공-해외파견-최종지원-전략.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>진주 승진 &amp; 퇴사 로드맵</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>career/진주-승진-퇴사-로드맵.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💼</span>
+            <h3>커리어 여정</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> career</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>career/커리어-여정.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>2026년 9월 20일 간증 준비</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>faith/2026-간증-준비.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>개역개정 vs 킹제임스 흠정역 — 쇼츠 콘텐츠 템플릿</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-18</div>
+            <div><label>갱신</label> 2026-08-18</div>
+            <div><label>파일</label> <code>faith/KJV-개역vs-흥정역-쇼츠-템플릿.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>KJV 묵상 쇼츠 자동화 계획서</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-16</div>
+            <div><label>갱신</label> 2026-08-16</div>
+            <div><label>파일</label> <code>faith/KJV-쇼츠-자동화-계획서.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>KJV 쇼츠 시리즈 — 개역 vs 흠정역 진행도</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-18</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>faith/KJV-시리즈-진행도.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>사랑침례교회 (내가 다니는 교회)</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-23</div>
+            <div><label>갱신</label> 2026-08-23</div>
+            <div><label>파일</label> <code>faith/사랑침례교회.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⛪</span>
+            <h3>신앙 여정</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> faith</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>faith/신앙-여정.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🧗</span>
+            <h3>아이들과의 경험 — 의미와 동기</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> experiences</div>
+            <div><label>시작</label> 2026-08-11</div>
+            <div><label>갱신</label> 2026-08-11</div>
+            <div><label>파일</label> <code>experiences/아이들과-경험.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🎯</span>
+            <h3>가족 플랜 결정 — 진주 발령·주거·나롯</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> goals</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>goals/가족플랜-결정.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🎯</span>
+            <h3>목표와 비전</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> goals</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>goals/목표와-비전.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🧬</span>
+            <h3>나, 진의태 — 온톨로지 (기준점)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> identity</div>
+            <div><label>시작</label> 2026-08-11</div>
+            <div><label>갱신</label> 2026-08-11</div>
+            <div><label>파일</label> <code>identity/나-온톨로지.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🧬</span>
+            <h3>나, 진의태</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> identity</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>identity/나-진의태.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🤝</span>
+            <h3>가족 행방 마스터 — 진의태 가족 현황·결정·데드라인</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> relationships</div>
+            <div><label>시작</label> 2026-08-17</div>
+            <div><label>갱신</label> 2026-08-17</div>
+            <div><label>파일</label> <code>relationships/가족-행방-마스터.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🤝</span>
+            <h3>가족</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> relationships</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>relationships/가족.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🤝</span>
+            <h3>시카고 파견 — 아내께 설명드릴 정리</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> relationships</div>
+            <div><label>시작</label> 2026-08-22</div>
+            <div><label>갱신</label> 2026-08-22</div>
+            <div><label>파일</label> <code>relationships/시카고-아내-설명.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">🤝</span>
+            <h3>영향받은 사람들</h3>
+            <span class="badge bd-orange">도안</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> relationships</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>relationships/영향받은-사람들.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⚖️</span>
+            <h3>내 인생의 신조</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> values</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>values/내-인생의-신조.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⚖️</span>
+            <h3>돈을 바라보는 관점</h3>
+            <span class="badge bd-orange">도안</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> values</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>values/돈을-바라보는-관점.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">⚖️</span>
+            <h3>자유와 보수</h3>
+            <span class="badge bd-orange">도안</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> values</div>
+            <div><label>시작</label> 2026-08-04</div>
+            <div><label>갱신</label> 2026-08-04</div>
+            <div><label>파일</label> <code>values/자유와-보수.md</code></div>
+          </div>
+        </div></div>
+  </div>
+
+  <footer>Hermes Command Center · 자동 생성, 수정금지 · 생성시각 2026-08-24T04:00:57.448858+09:00</footer>
+</div>
+<script>
+document.querySelectorAll('nav button').forEach(function(b){
+  b.onclick=function(){
+    var id=b.dataset.tab;
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+  };
+});
+var STORE='hc_done';
+function doneState(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}
+function saveDone(s){localStorage.setItem(STORE,JSON.stringify(s))}
+function applyDone(){
+  var s=doneState();
+  document.querySelectorAll('.done-cb').forEach(function(cb){
+    var k=cb.dataset.key;
+    if(s[k]){cb.checked=true; var pc=cb.closest('.pcard'); if(pc)pc.classList.add('done')}
+    else{cb.checked=false; var pc2=cb.closest('.pcard'); if(pc2)pc2.classList.remove('done')}
+  });
+}
+function toggleDone(cb){
+  var k=cb.dataset.key;var s=doneState();
+  if(cb.checked){s[k]=1}else{delete s[k]}
+  saveDone(s);applyDone();updateCount();
+}
+document.querySelectorAll('.done-cb').forEach(function(cb){cb.addEventListener('change',function(){toggleDone(cb)})});
+function filterProj(){
+  var q=(document.getElementById('projSearch').value||'').toLowerCase();
+  var cat=document.getElementById('projCat').value;
+  var st=document.getElementById('projStatus').value;
+  var dn=document.getElementById('projDone').value;
+  var s=doneState();
+  var vis=0;
+  document.querySelectorAll('#projGrid .pcard').forEach(function(pc){
+    var name=(pc.querySelector('h3')||'').textContent.toLowerCase();
+    var catTxt=(pc.querySelector('.pc-meta')||'').textContent;
+    var rstatus=pc.querySelector('.badge').textContent.trim();
+    var k=pc.querySelector('.done-cb').dataset.key;
+    var hasDone=!!s[k];
+    var show=true;
+    if(q&&name.indexOf(q)<0&&catTxt.indexOf(q)<0)show=false;
+    if(cat&&catTxt.indexOf(cat)<0)show=false;
+    if(st){var map={mature:'성숙',growing:'성장',stub:'도안'};var want=map[st]||st;if(rstatus.indexOf(want)<0)show=false;}
+    if(dn!==''){if(dn=='1'&&!hasDone)show=false;if(dn=='0'&&hasDone)show=false;}
+    pc.style.display=show?'':'none';
+    if(show)vis++;
+  });
+  document.getElementById('projCount').textContent='('+vis+'개)';
+}
+function updateCount(){
+  var vis=0;document.querySelectorAll('#projGrid .pcard').forEach(function(pc){if(pc.style.display!=='none')vis++});
+  document.getElementById('projCount').textContent='('+vis+'개)';
+}
+document.getElementById('projSearch').addEventListener('input',filterProj);
+document.getElementById('projCat').addEventListener('change',filterProj);
+document.getElementById('projStatus').addEventListener('change',filterProj);
+document.getElementById('projDone').addEventListener('change',filterProj);
+applyDone();updateCount();
+</script>
+</body>
+</html>
