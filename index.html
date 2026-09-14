@@ -101,23 +101,23 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
 <div class="wrap">
   <header>
     <h1>🛰 Hermes Command Center <small>데이브 운영 대시보드</small></h1>
-    <div class="meta">최종 갱신: 2026-09-14 04:00 · <span class="health err">🟢 오류 4건</span></div>
+    <div class="meta">최종 갱신: 2026-09-15 04:00 · <span class="health err">🟢 오류 5건</span></div>
   </header>
 
   <div class="stats">
     <div class="stat"><div class="n ok">29</div><div class="l">가동 중 크론</div></div>
     <div class="stat"><div class="n">3</div><div class="l">중지 크론</div></div>
-    <div class="stat"><div class="n"><span class="err">4</span></div><div class="l">오류 건</div></div>
+    <div class="stat"><div class="n"><span class="err">5</span></div><div class="l">오류 건</div></div>
     <div class="stat"><div class="n">9</div><div class="l">스크립트(무에이전트)</div></div>
     <div class="stat"><div class="n">60</div><div class="l">보유 스킬</div></div>
-    <div class="stat"><div class="n">132</div><div class="l">인사이트 WIKI</div></div>
+    <div class="stat"><div class="n">136</div><div class="l">인사이트 WIKI</div></div>
   </div>
 
   <nav>
     <button class="active" data-tab="tab-cron">⚙ 크론잡 (32)</button>
     <button data-tab="tab-project">📌 프로젝트</button>
     <button data-tab="tab-skill">🧠 스킬 (60)</button>
-    <button data-tab="tab-insight">💡 인사이트 (132)</button>
+    <button data-tab="tab-insight">💡 인사이트 (136)</button>
   </nav>
 
   <div class="tab active" id="tab-cron">
@@ -130,8 +130,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 7 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 07:00</div>
-            <div><label>최근 실행</label> 2026-09-13 07:07</div>
+            <div><label>다음 실행</label> 2026-09-15 07:00</div>
+            <div><label>최근 실행</label> 2026-09-14 07:03</div>
             <div><label>모델</label> <code>deepseek/deepseek-v4-pro</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>telegram:-1003767764690</code></div>
             <div><label>스킬</label> 없음</div>
@@ -141,20 +141,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-head">
-            <span class="dot st-err"></span>
+            <span class="dot st-ok"></span>
             <h3>Second Brain — 진의태 채팅 자동 ingest</h3>
-            <span class="status st-err">error</span>
+            <span class="status st-ok">OK</span>
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:00</div>
-            <div><label>최근 실행</label> 2026-09-13 08:02</div>
+            <div><label>다음 실행</label> 2026-09-15 08:00</div>
+            <div><label>최근 실행</label> 2026-09-14 08:04</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
           </div>
           
-          <div class="errbox">⚠ RuntimeError: Error code: 403 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;This IP is not allowed to use the API.&#x27;, &#x27;type&#x27;: &#x27;permission_error&#x27;, &#x27;code&#x27;: &#x27;ip_banned&#x27;}}</div>
+          
         </div>
         <div class="card">
           <div class="c-head">
@@ -164,8 +164,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 21 * * 1,3,5</code></div>
-            <div><label>다음 실행</label> 2026-09-14 21:00</div>
-            <div><label>최근 실행</label> 2026-09-11 21:03</div>
+            <div><label>다음 실행</label> 2026-09-16 21:00</div>
+            <div><label>최근 실행</label> 2026-09-14 21:04</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -175,20 +175,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-head">
-            <span class="dot st-ok"></span>
+            <span class="dot st-err"></span>
             <h3>NQ 장전 브리핑 v3.0</h3>
-            <span class="status st-ok">OK</span>
+            <span class="status st-err">error</span>
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 20 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 20:00</div>
-            <div><label>최근 실행</label> 2026-09-13 20:05</div>
+            <div><label>다음 실행</label> 2026-09-15 20:00</div>
+            <div><label>최근 실행</label> 2026-09-14 20:05</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>telegram:-1003767764690</code></div>
             <div><label>스킬</label> trading-workflow</div>
           </div>
           
-          
+          <div class="errbox">⚠ RuntimeError: Error code: 403 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;This IP is not allowed to use the API.&#x27;, &#x27;type&#x27;: &#x27;permission_error&#x27;, &#x27;code&#x27;: &#x27;ip_banned&#x27;}}</div>
         </div>
         <div class="card">
           <div class="c-head">
@@ -215,8 +215,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 3 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-15 03:00</div>
-            <div><label>최근 실행</label> 2026-09-14 03:00</div>
+            <div><label>다음 실행</label> 2026-09-16 03:00</div>
+            <div><label>최근 실행</label> 2026-09-15 03:00</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>local</code></div>
             <div><label>스킬</label> 없음</div>
@@ -232,8 +232,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 */6 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 06:00</div>
-            <div><label>최근 실행</label> 2026-09-14 00:00</div>
+            <div><label>다음 실행</label> 2026-09-15 06:00</div>
+            <div><label>최근 실행</label> 2026-09-15 00:00</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>local</code></div>
             <div><label>스킬</label> 없음</div>
@@ -283,8 +283,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>15 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:15</div>
-            <div><label>최근 실행</label> 2026-09-13 08:19</div>
+            <div><label>다음 실행</label> 2026-09-15 08:15</div>
+            <div><label>최근 실행</label> 2026-09-14 08:20</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>local</code></div>
             <div><label>스킬</label> obsidian-second-brain</div>
@@ -334,8 +334,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 4 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-15 04:00</div>
-            <div><label>최근 실행</label> 2026-09-13 04:01</div>
+            <div><label>다음 실행</label> 2026-09-16 04:00</div>
+            <div><label>최근 실행</label> 2026-09-14 04:01</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>local</code></div>
             <div><label>스킬</label> 없음</div>
@@ -351,8 +351,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 8 * * 1</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:00</div>
-            <div><label>최근 실행</label> 2026-09-07 08:04</div>
+            <div><label>다음 실행</label> 2026-09-21 08:00</div>
+            <div><label>최근 실행</label> 2026-09-14 08:07</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> real-estate-advisor-john</div>
@@ -368,8 +368,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:00</div>
-            <div><label>최근 실행</label> 2026-09-13 08:01</div>
+            <div><label>다음 실행</label> 2026-09-15 08:00</div>
+            <div><label>최근 실행</label> 2026-09-14 08:01</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -385,8 +385,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 9 * * 1</code></div>
-            <div><label>다음 실행</label> 2026-09-14 09:00</div>
-            <div><label>최근 실행</label> 2026-09-07 09:10</div>
+            <div><label>다음 실행</label> 2026-09-21 09:00</div>
+            <div><label>최근 실행</label> 2026-09-14 09:20</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -402,8 +402,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>15 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:15</div>
-            <div><label>최근 실행</label> 2026-09-13 08:24</div>
+            <div><label>다음 실행</label> 2026-09-15 08:15</div>
+            <div><label>최근 실행</label> 2026-09-14 08:22</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -419,8 +419,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>45 6 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 06:45</div>
-            <div><label>최근 실행</label> 2026-09-13 06:45</div>
+            <div><label>다음 실행</label> 2026-09-15 06:45</div>
+            <div><label>최근 실행</label> 2026-09-14 06:45</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -436,8 +436,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 9 * * 1</code></div>
-            <div><label>다음 실행</label> 2026-09-14 09:00</div>
-            <div><label>최근 실행</label> 2026-09-07 09:02</div>
+            <div><label>다음 실행</label> 2026-09-21 09:00</div>
+            <div><label>최근 실행</label> 2026-09-14 09:05</div>
             <div><label>모델</label> <code>nvidia/nemotron-3-ultra-550b-a55b:free</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -470,8 +470,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 10 * * 1,3,5</code></div>
-            <div><label>다음 실행</label> 2026-09-14 10:00</div>
-            <div><label>최근 실행</label> 2026-09-11 10:08</div>
+            <div><label>다음 실행</label> 2026-09-16 10:00</div>
+            <div><label>최근 실행</label> 2026-09-14 10:16</div>
             <div><label>모델</label> <code>openai/gpt-5-mini</code> <span class="dim">[openrouter]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -487,8 +487,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 4 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-15 04:00</div>
-            <div><label>최근 실행</label> 2026-09-13 04:01</div>
+            <div><label>다음 실행</label> 2026-09-16 04:00</div>
+            <div><label>최근 실행</label> 2026-09-14 04:01</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -504,8 +504,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>30 5 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 05:30</div>
-            <div><label>최근 실행</label> 2026-09-13 05:32</div>
+            <div><label>다음 실행</label> 2026-09-15 05:30</div>
+            <div><label>최근 실행</label> 2026-09-14 05:32</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -521,8 +521,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>15 7 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 07:15</div>
-            <div><label>최근 실행</label> 2026-09-13 07:15</div>
+            <div><label>다음 실행</label> 2026-09-15 07:15</div>
+            <div><label>최근 실행</label> 2026-09-14 07:15</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -538,8 +538,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code></code></div>
-            <div><label>다음 실행</label> 2026-09-14 06:37</div>
-            <div><label>최근 실행</label> 2026-09-14 02:37</div>
+            <div><label>다음 실행</label> 2026-09-15 06:51</div>
+            <div><label>최근 실행</label> 2026-09-15 02:51</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>local</code></div>
             <div><label>스킬</label> 없음</div>
@@ -549,20 +549,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-head">
-            <span class="dot st-ok"></span>
+            <span class="dot st-err"></span>
             <h3>일기 주간 회고</h3>
-            <span class="status st-ok">OK</span>
+            <span class="status st-err">error</span>
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 9 * * 1</code></div>
-            <div><label>다음 실행</label> 2026-09-14 09:00</div>
-            <div><label>최근 실행</label> 2026-09-07 09:08</div>
+            <div><label>다음 실행</label> 2026-09-21 09:00</div>
+            <div><label>최근 실행</label> 2026-09-14 09:20</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> obsidian-second-brain,diary-to-wiki</div>
           </div>
           
-          
+          <div class="errbox">⚠ RuntimeError: Error code: 403 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;This IP is not allowed to use the API.&#x27;, &#x27;type&#x27;: &#x27;permission_error&#x27;, &#x27;code&#x27;: &#x27;ip_banned&#x27;}}</div>
         </div>
         <div class="card">
           <div class="c-head">
@@ -606,8 +606,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>2 */4 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 04:02</div>
-            <div><label>최근 실행</label> 2026-09-14 00:03</div>
+            <div><label>다음 실행</label> 2026-09-15 04:02</div>
+            <div><label>최근 실행</label> 2026-09-15 00:03</div>
             <div><label>모델</label> <code></code> <span class="dim">[스크립트]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -623,8 +623,8 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:00</div>
-            <div><label>최근 실행</label> 2026-09-13 08:01</div>
+            <div><label>다음 실행</label> 2026-09-15 08:00</div>
+            <div><label>최근 실행</label> 2026-09-14 08:00</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> 없음</div>
@@ -634,14 +634,14 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-head">
-            <span class="dot st-miss"></span>
+            <span class="dot st-ok"></span>
             <h3>watchman-daily-collect-enhanced</h3>
-            <span class="status st-miss">never</span>
+            <span class="status st-ok">OK</span>
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 8 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 08:00</div>
-            <div><label>최근 실행</label> -</div>
+            <div><label>다음 실행</label> 2026-09-15 08:00</div>
+            <div><label>최근 실행</label> 2026-09-14 08:01</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> terminal,file</div>
@@ -651,14 +651,14 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-head">
-            <span class="dot st-miss"></span>
+            <span class="dot st-ok"></span>
             <h3>watchman-assembly-bills-daily</h3>
-            <span class="status st-miss">never</span>
+            <span class="status st-ok">OK</span>
           </div>
           <div class="c-meta">
             <div><label>스케줄</label> <code>0 9 * * *</code></div>
-            <div><label>다음 실행</label> 2026-09-14 09:00</div>
-            <div><label>최근 실행</label> -</div>
+            <div><label>다음 실행</label> 2026-09-15 09:00</div>
+            <div><label>최근 실행</label> 2026-09-14 09:02</div>
             <div><label>모델</label> <code>주력(무오버라이드)</code> <span class="dim">[전역]</span></div>
             <div><label>전송</label> <code>origin</code></div>
             <div><label>스킬</label> terminal,file</div>
@@ -696,6 +696,16 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div class="hl-sub"><span class="bd bd-blue">insights</span>
               <span class="dim">시작 2026-09-07</span>
               <span class="dim">갱신 2026-09-07</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">💡</div>
+          <div class="hl-body">
+            <div class="hl-title">카페 부동산 인사이트 - 2026-09-14</div>
+            <div class="hl-sub"><span class="bd bd-blue">insights</span>
+              <span class="dim">시작 2026-09-14</span>
+              <span class="dim">갱신 2026-09-14</span></div>
           </div>
           <div class="hl-badge">🏆 대표 성과</div>
         </div>
@@ -812,6 +822,16 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         <div class="hl-card">
           <div class="hl-icon">📈</div>
           <div class="hl-body">
+            <div class="hl-title">카페 부동산 인사이트 - 2026-09-14</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-09-14</span>
+              <span class="dim">갱신 2026-09-14</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
             <div class="hl-title">당부카페 투자 시사점 - 2026-08-31</div>
             <div class="hl-sub"><span class="bd bd-blue">investing</span>
               <span class="dim">시작 2026-08-31</span>
@@ -826,6 +846,16 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div class="hl-sub"><span class="bd bd-blue">investing</span>
               <span class="dim">시작 2026-09-07</span>
               <span class="dim">갱신 2026-09-07</span></div>
+          </div>
+          <div class="hl-badge">🏆 대표 성과</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-icon">📈</div>
+          <div class="hl-body">
+            <div class="hl-title">카페 투자 시사점 - 2026-09-14</div>
+            <div class="hl-sub"><span class="bd bd-blue">investing</span>
+              <span class="dim">시작 2026-09-14</span>
+              <span class="dim">갱신 2026-09-14</span></div>
           </div>
           <div class="hl-badge">🏆 대표 성과</div>
         </div>
@@ -1068,6 +1098,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
             <div><label>시작</label> 2026-09-07</div>
             <div><label>갱신</label> 2026-09-07</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="insights/카페-부동산-인사이트-2026-09-14.md">
+          <div class="pc-top">
+            <span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 - 2026-09-14</h3>
+            <input type="checkbox" class="done-cb" data-key="insights/카페-부동산-인사이트-2026-09-14.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">insights</span></div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
           </div>
         </div>
@@ -1757,6 +1801,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
           </div>
         </div>
+        <div class="pcard" data-key="investing/부동산/부동산-BLACK-2026-09-12.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-09-12)</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/부동산-BLACK-2026-09-12.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:60%"></div><span class="pc-pct">60%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
+          </div>
+        </div>
         <div class="pcard mature" data-key="investing/부동산/부동산-BLACK-전체아카이브-인덱스.md">
           <div class="pc-top">
             <span class="picon">📈</span>
@@ -1809,7 +1867,7 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           <div class="pc-meta">
             <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
             <div><label>시작</label> 2026-08-15</div>
-            <div><label>갱신</label> 2026-09-07</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
           </div>
         </div>
@@ -1823,7 +1881,7 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           <div class="pc-meta">
             <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
             <div><label>시작</label> 2026-08-15</div>
-            <div><label>갱신</label> 2026-09-07</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>상태</label> <span class="badge bd-orange">성장</span></div>
           </div>
         </div>
@@ -1953,6 +2011,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
           </div>
         </div>
+        <div class="pcard mature" data-key="investing/부동산/카페-부동산-인사이트-2026-09-14.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 - 2026-09-14</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-부동산-인사이트-2026-09-14.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
         <div class="pcard" data-key="investing/부동산/카페-투자-시사점-2026-08-16.md">
           <div class="pc-top">
             <span class="picon">📈</span>
@@ -2020,6 +2092,20 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
             <div><label>시작</label> 2026-09-07</div>
             <div><label>갱신</label> 2026-09-07</div>
+            <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
+          </div>
+        </div>
+        <div class="pcard mature" data-key="investing/부동산/카페-투자-시사점-2026-09-14.md">
+          <div class="pc-top">
+            <span class="picon">📈</span>
+            <h3>카페 투자 시사점 - 2026-09-14</h3>
+            <input type="checkbox" class="done-cb" data-key="investing/부동산/카페-투자-시사점-2026-09-14.md" title="완료로 표시">
+          </div>
+          <div class="pc-bar"><div class="pc-fill" style="width:100%"></div><span class="pc-pct">100%</span></div>
+          <div class="pc-meta">
+            <div><label>분류</label> <span class="bd bd-blue">investing</span></div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>상태</label> <span class="badge st-ok">성숙</span></div>
           </div>
         </div>
@@ -2649,6 +2735,18 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-top"><span class="picon">💡</span>
+            <h3>카페 부동산 인사이트 - 2026-09-14</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> insights</div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>파일</label> <code>insights/카페-부동산-인사이트-2026-09-14.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">💡</span>
             <h3>칸반 기반 멀티에이전트 팀 활용</h3>
             <span class="badge bd-orange">성장</span>
           </div>
@@ -3237,6 +3335,18 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-top"><span class="picon">📈</span>
+            <h3>부동산 BLACK (2026-09-12)</h3>
+            <span class="badge bd-orange">성장</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>파일</label> <code>investing/부동산/부동산-BLACK-2026-09-12.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
             <h3>부동산 BLACK 2026 전체 아카이브 인덱스</h3>
             <span class="badge st-ok">성숙</span>
           </div>
@@ -3279,7 +3389,7 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           <div class="c-meta">
             <div><label>분류</label> investing</div>
             <div><label>시작</label> 2026-08-15</div>
-            <div><label>갱신</label> 2026-09-07</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>파일</label> <code>investing/부동산/부동산-뉴스-정책-로그.md</code></div>
           </div>
         </div>
@@ -3291,7 +3401,7 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
           <div class="c-meta">
             <div><label>분류</label> investing</div>
             <div><label>시작</label> 2026-08-15</div>
-            <div><label>갱신</label> 2026-09-07</div>
+            <div><label>갱신</label> 2026-09-14</div>
             <div><label>파일</label> <code>investing/부동산/부동산-세무-마스터.md</code></div>
           </div>
         </div>
@@ -3405,6 +3515,18 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div>
         <div class="card">
           <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 부동산 인사이트 - 2026-09-14</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>파일</label> <code>investing/부동산/카페-부동산-인사이트-2026-09-14.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
             <h3>카페 투자 시사점 (2026-08-16)</h3>
             <span class="badge bd-orange">성장</span>
           </div>
@@ -3461,6 +3583,18 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
             <div><label>시작</label> 2026-09-07</div>
             <div><label>갱신</label> 2026-09-07</div>
             <div><label>파일</label> <code>investing/부동산/카페-투자-시사점-2026-09-07.md</code></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="c-top"><span class="picon">📈</span>
+            <h3>카페 투자 시사점 - 2026-09-14</h3>
+            <span class="badge st-ok">성숙</span>
+          </div>
+          <div class="c-meta">
+            <div><label>분류</label> investing</div>
+            <div><label>시작</label> 2026-09-14</div>
+            <div><label>갱신</label> 2026-09-14</div>
+            <div><label>파일</label> <code>investing/부동산/카페-투자-시사점-2026-09-14.md</code></div>
           </div>
         </div>
         <div class="card">
@@ -4041,7 +4175,7 @@ footer {margin-top:30px; color:var(--dim); font-size:12px; text-align:center}
         </div></div>
   </div>
 
-  <footer>Hermes Command Center · 자동 생성, 수정금지 · 생성시각 2026-09-14T04:00:46.978971+09:00</footer>
+  <footer>Hermes Command Center · 자동 생성, 수정금지 · 생성시각 2026-09-15T04:00:38.750973+09:00</footer>
 </div>
 <script>
 document.querySelectorAll('nav button').forEach(function(b){
